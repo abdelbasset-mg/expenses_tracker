@@ -9,6 +9,6 @@ class ExpensesList extends StatelessWidget {
 
   @override
   Widget build(context) {
-    return
+    return Card( child: Text(expenses.title),);
   }
 }
