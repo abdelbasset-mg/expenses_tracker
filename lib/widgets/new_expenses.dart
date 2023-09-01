@@ -12,6 +12,16 @@ class _NewExpensesState extends State<NewExpenses> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
 
+  void _selectDate() {
+    var now = DateTime.now();
+    showDatePicker(
+      context: context,
+      initialDate: now,
+      firstDate: DateTime(now.year - 1 , now.month, now.day),
+      lastDate: now,
+    );
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -32,16 +42,40 @@ class _NewExpensesState extends State<NewExpenses> {
               labelText: 'Title',
             ),
           ),
-          TextField(
-            decoration: const InputDecoration(
-              prefixText: '\$ ',
-              labelText: 'Amount',
-            ),
-            keyboardType: TextInputType.number,
-            controller: _amountController,
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    prefixText: '\$ ',
+                    labelText: 'Amount',
+                  ),
+                  keyboardType: TextInputType.number,
+                  controller: _amountController,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Text('today date'),
+                  IconButton(
+                    onPressed: _selectDate,
+                    icon: const Icon(Icons.calendar_today),
+                  ),
+                ],
+              )),
+            ],
           ),
           Row(
             children: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Cancel'),
+              ),
               ElevatedButton(
                 onPressed: () {
                   print(_titleController.text);
@@ -49,11 +83,7 @@ class _NewExpensesState extends State<NewExpenses> {
                 },
                 child: const Text('Add Expense'),
               ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Cancel'),
-              ),
-            ],
+            ]
           )
         ],
       ),
