@@ -32,9 +32,15 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
       context: context,
       builder: (cxt) {
-        return const NewExpenses();
+        return NewExpenses( onAddExpense: _addExpenses ,);
       },
     );
+  }
+
+  void _addExpenses (Expense expense){
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
   }
 
   @override
