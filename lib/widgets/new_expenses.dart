@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:expenses_tracker/models/expense.dart';
 
 class NewExpenses extends StatefulWidget {
   const NewExpenses({super.key});
@@ -11,15 +12,21 @@ class NewExpenses extends StatefulWidget {
 class _NewExpensesState extends State<NewExpenses> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate;
+  var _selectedCategory = Category.food;
 
-  void _selectDate() {
-    var now = DateTime.now();
-    showDatePicker(
+  void _selectDate() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final _pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
-      firstDate: DateTime(now.year - 1 , now.month, now.day),
+      firstDate: firstDate,
       lastDate: now,
     );
+    setState(() {
+      _selectedDate = _pickedDate;
+    });
   }
 
   @override
@@ -59,7 +66,9 @@ class _NewExpensesState extends State<NewExpenses> {
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text('today date'),
+                  Text(_selectedDate == null
+                      ? 'No date selected'
+                      : formatter.format(_selectedDate!)),
                   IconButton(
                     onPressed: _selectDate,
                     icon: const Icon(Icons.calendar_today),
@@ -68,23 +77,39 @@ class _NewExpensesState extends State<NewExpenses> {
               )),
             ],
           ),
-          Row(
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  print(_titleController.text);
-                  print(_amountController.text);
-                },
-                child: const Text('Add Expense'),
-              ),
-            ]
-          )
+          Row(children: [
+            DropdownButton(
+                value: _selectedCategory,
+                items: Category.values
+                    .map(
+                      (category) => DropdownMenuItem(
+                        value: category,
+                        child: Text(
+                          category.name.toUpperCase(),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() {
+                    _selectedCategory = value ;
+                  });
+                }),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                print(_titleController.text);
+                print(_amountController.text);
+              },
+              child: const Text('Add Expense'),
+            ),
+          ])
         ],
       ),
     );
