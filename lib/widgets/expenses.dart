@@ -4,7 +4,7 @@ import 'package:expenses_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expenses_tracker/widgets/new_expenses.dart';
 
 class Expenses extends StatefulWidget {
-  const Expenses ( {super.key});
+  const Expenses({super.key});
   @override
   State<Expenses> createState() {
     return _ExpensesState();
@@ -12,7 +12,6 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-
   final List<Expense> _registeredExpenses = [
     Expense(
       title: 'Groceries',
@@ -30,29 +29,58 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpensesModal() {
     showModalBottomSheet(
-      isScrollControlled: true  ,
+      isScrollControlled: true,
       context: context,
       builder: (cxt) {
-        return NewExpenses( onAddExpense: _addExpenses ,);
+        return NewExpenses(
+          onAddExpense: _addExpenses,
+        );
       },
     );
   }
 
-  void _addExpenses (Expense expense){
+  void _addExpenses(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
     });
   }
 
-  void _deleteExpense(Expense expense){
+  void _deleteExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
       _registeredExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text('Data Deleted'),
+        action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              setState(() {
+                
+              _registeredExpenses.insert(expenseIndex, expense);
+              });
+            }),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    Widget mainContent = const Center(
+      child: Text(
+        'No expenses added yet, Start adding!',
+      ),
+    );
+    if (_registeredExpenses.isNotEmpty) {
+      mainContent = ExpensesList(
+        expenses: _registeredExpenses,
+        onDeleteExpense: _deleteExpense,
+      );
+    }
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Expenses Tracker'),
         actions: [
@@ -62,11 +90,12 @@ class _ExpensesState extends State<Expenses> {
           )
         ],
       ),
-      body: 
-      Column(
+      body: Column(
         children: [
           const Text('chart'),
-          Expanded(child: ExpensesList(expenses: _registeredExpenses, onDeleteExpense: _deleteExpense,) ),
+          Expanded(
+            child: mainContent,
+          ),
         ],
       ),
     );
