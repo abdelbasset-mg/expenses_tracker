@@ -30,6 +30,7 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpensesModal() {
     showModalBottomSheet(
+      isScrollControlled: true  ,
       context: context,
       builder: (cxt) {
         return NewExpenses( onAddExpense: _addExpenses ,);
