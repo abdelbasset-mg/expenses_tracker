@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:expenses_tracker/widgets/expenses.dart';
 
 var kColorScheme =
-    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 96, 59, 181));
+    ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 67, 255, 25));
 
 var kDarkScheme =
-    ColorScheme.fromSeed(seedColor: const Color.fromARGB(255,5, 99, 125),brightness: Brightness.dark);
+    ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 67, 255, 25),brightness: Brightness.dark);
 
 void main() {
   runApp(
@@ -14,7 +14,7 @@ void main() {
           useMaterial3: true,
           colorScheme: kDarkScheme,
           cardTheme: const CardTheme().copyWith(
-            color: kDarkScheme.secondaryContainer,
+            color: kDarkScheme.primaryContainer,
             margin: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 8,
@@ -37,7 +37,7 @@ void main() {
             foregroundColor: kColorScheme.primaryContainer,
           ),
           cardTheme: const CardTheme().copyWith(
-            color: kColorScheme.secondaryContainer,
+            color: kColorScheme.primaryContainer,
             margin: const EdgeInsets.symmetric(
               horizontal: 16,
               vertical: 8,
