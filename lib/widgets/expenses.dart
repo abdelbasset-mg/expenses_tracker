@@ -84,7 +84,7 @@ class _ExpensesState extends State<Expenses> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Expenses Tracker'),
+        title: const Text('Expenses Tracker',style: TextStyle(fontSize: 24)),
         actions: [
           IconButton(
             onPressed: _openAddExpensesModal,
